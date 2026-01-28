@@ -151,17 +151,17 @@ services:
 
 skills:
   Programming:
-    - name: "[Name]"
-      logo: "https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg"
-      proficiency: "[Proficiency]"
-      description: "[Description]"
-
-    - name: "Python"
-      logo: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg"
+    - name: "Java"
+      logo: "https://cdn.iconscout.com/icon/free/png-256/free-java-logo-icon-svg-download-png-2945017.png?f=webp"
       proficiency: Experienced
       description: null
 
-    - name: "JavaScript"
+    - name: "C"
+      logo: "https://upload.wikimedia.org/wikipedia/commons/1/19/C_Logo.png"
+      proficiency: Experienced
+      description: null
+
+    - name: "HTML/CSS"
       logo: "https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg"
       proficiency: Fluent
       description: null
@@ -182,7 +182,7 @@ skills:
       proficiency: Fluent
       description: null
 
-    - name: "Next.js"
+    - name: "GitHub"
       logo: "https://logo.svgcdn.com/devicon/nextjs-original.png"
       proficiency: Fluent
       description: null
