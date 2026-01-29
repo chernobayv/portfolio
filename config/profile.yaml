@@ -57,7 +57,7 @@ education:
   - degree: "Ontario Secondary School Diploma (OSSD)"
     school: "Humberside Collegiate Institute"
     years: "2020 - 2022"
-    logo: "/images/ntu_logo.svg"
+    logo: "public/images/SWLogo-removebg-preview.png"
 
 # # =====================================================
 # # 💼 Work Experience Section 
@@ -217,10 +217,10 @@ skills:
   Language:
     - name: "English"
       logo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/OOjs_UI_icon_language-ltr-progressive.svg"
-      proficiency: Native
-      description: "Native Fluency"
-
-    - name: "Taiwanese Hokkien"
-      logo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/OOjs_UI_icon_language-ltr-progressive.svg"
       proficiency: Fluent
       description: "Professional working proficiency."
+
+    - name: "Russian"
+      logo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/OOjs_UI_icon_language-ltr-progressive.svg"
+      proficiency: Native
+      description: "Native Fluency"
