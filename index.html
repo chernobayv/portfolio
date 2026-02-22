@@ -1,1 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Victoria Chernobay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --white: #ffffff;
+  --off: #f9f9f7;
+  --ink: #111111;
+  --ink-mid: #555555;
+  --ink-light: #999999;
+  --border: #e8e8e8;
+
+  /* highlight chip colors — like the reference */
+  --h-yellow: #f5e642;
+  --h-green:  #b8f0a0;
+  --h-blue:   #a8d8f0;
+  --h-pink:   #f5b8d0;
+  --h-orange: #f5c8a0;
+  --h-purple: #d8b8f5;
+  --h-red:    #f5a8a8;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+#cursor {
+  position: fixed; pointer-events: none; z-index: 9999;
+  width: 8px; height: 8px;
+  background: var(--ink);
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+  transition: width .18s, height .18s, background .18s;
+}
+#cursor-ring {
+  position: fixed; pointer-events: none; z-index: 9998;
+  width: 28px; height: 28px;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+}
+.cur-link #cursor { width: 16px; height: 16px; background: #333; }
+.cur-link #cursor-ring { width: 46px; height: 46px; }
+
+@media (hover: none) {
+  #cursor, #cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  min-height: 100vh;
+}
+
+/* ── LEFT NAV ── */
+.sidenav {
+  position: fixed;
+  top: 0; left: 0;
+  width: 160px;
+  height: 100vh;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  border-right: 1px solid var(--border);
+  z-index: 50;
+  background: var(--white);
+}
+.sidenav-links {
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 0.15rem;
+  margin-top: 0;
+}
+.sidenav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.06em;
+  color: var(--ink-light); text-decoration: none;
+  padding: 0.25rem 0;
+  transition: color .2s;
+  text-align: right;
+}
+.sidenav-links a:hover { color: var(--ink); }
+.sidenav-links a.active { color: var(--ink); }
+
+.sidenav-bottom {
+  margin-top: auto;
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 0.5rem;
+}
+.sidenav-status {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  color: var(--ink-light); text-align: right;
+}
+.status-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #22c55e; flex-shrink: 0;
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* ── MAIN CONTENT ── */
+main {
+  margin-left: 160px;
+  padding: 3.5rem 4rem 6rem 4rem;
+  max-width: 900px;
+}
+
+/* ── HERO ── */
+.hero { margin-bottom: 4.5rem; }
+
+.hero-name {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(4rem, 10vw, 9rem);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 0.2em;
+  opacity: 0; animation: fadeUp .7s .05s forwards;
+}
+.hero-name a {
+  text-decoration: none; color: inherit;
+  transition: opacity .2s;
+}
+.hero-name a:hover { opacity: 0.7; }
+.hero-name .italic { font-style: italic; }
+
+.hero-meta {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 1.4rem;
+  opacity: 0; animation: fadeUp .7s .15s forwards;
+}
+.hero-school {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 0.06em;
+  color: var(--ink-mid);
+}
+.hero-highlight {
+  display: inline-block;
+  padding: 0.08rem 0.5rem;
+  border-radius: 2px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 0.04em;
+}
+
+.hero-tagline {
+  font-size: 1.05rem; font-weight: 400;
+  color: var(--ink); margin-bottom: 1.6rem;
+  opacity: 0; animation: fadeUp .7s .25s forwards;
+}
+.hero-tagline strong { font-weight: 500; }
+
+/* ── BULLET LIST (main style like reference) ── */
+.info-list {
+  list-style: none;
+  margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp .7s .35s forwards;
+}
+.info-list li {
+  font-size: 0.92rem;
+  color: var(--ink-mid);
+  padding: 0.3rem 0;
+  display: flex; align-items: baseline;
+  gap: 0.5rem; flex-wrap: wrap;
+  line-height: 1.7;
+}
+.info-list li::before {
+  content: '>';
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--ink-light);
+  flex-shrink: 0;
+  margin-right: 0.1rem;
+}
+
+/* ── HIGHLIGHT CHIP ── */
+.hl {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border-radius: 3px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  cursor: default;
+  white-space: nowrap;
+}
+.hl-y  { background: var(--h-yellow); color: #3a3000; }
+.hl-g  { background: var(--h-green);  color: #0a3a00; }
+.hl-b  { background: var(--h-blue);   color: #003050; }
+.hl-p  { background: var(--h-pink);   color: #500030; }
+.hl-o  { background: var(--h-orange); color: #4a2000; }
+.hl-pu { background: var(--h-purple); color: #2a0050; }
+.hl-r  { background: var(--h-red);    color: #500000; }
+
+/* underline style (like "build" in reference) */
+.ul-ink { border-bottom: 2px solid var(--ink); padding-bottom: 0px; }
+
+/* ── SECTION ── */
+.section { margin-bottom: 4rem; }
+.section-header {
+  display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.section-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink); flex-shrink: 0;
+}
+.section-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem; letter-spacing: 0.1em;
+  color: var(--ink); font-weight: 400;
+}
+
+/* ── PROJECT GRID ── */
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.proj-card {
+  position: relative;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: none;
+  background: var(--off);
+  transition: border-color .2s;
+  border-radius: 4px;
+}
+.proj-card:hover { border-color: #ccc; }
+
+.proj-thumb {
+  position: relative;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+.proj-thumb canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+.proj-thumb-fade {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, var(--off) 0%, transparent 50%);
+}
+
+/* hover preview tooltip */
+.proj-preview {
+  position: fixed;
+  width: 200px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0;
+  transform: scale(0.94) translateY(6px);
+  transition: opacity .18s, transform .18s;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+.proj-preview.show {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.proj-preview canvas { width: 100%; display: block; }
+.proj-preview-url {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; color: var(--ink-light);
+  padding: 0.4rem 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+.proj-body { padding: 0.9rem 1rem 1rem; }
+.proj-kind {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; letter-spacing: 0.1em;
+  color: var(--ink-light); margin-bottom: 0.3rem;
+}
+.proj-name {
+  font-family: 'Instrument Serif', serif;
+  font-size: 1.05rem; color: var(--ink);
+  margin-bottom: 0.35rem;
+  transition: opacity .2s;
+}
+.proj-card:hover .proj-name { opacity: 0.6; }
+.proj-desc {
+  font-size: 0.78rem; color: var(--ink-mid);
+  line-height: 1.75; margin-bottom: 0.7rem;
+}
+.proj-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.proj-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; color: var(--ink-light);
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+
+/* ── EXPERIENCE ── */
+.exp-list { display: flex; flex-direction: column; gap: 0; }
+.exp-item {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 1.5rem;
+  padding: 1.4rem 0;
+  border-top: 1px solid var(--border);
+}
+.exp-item:last-child { border-bottom: 1px solid var(--border); }
+.exp-when {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; color: var(--ink-light);
+  letter-spacing: 0.04em; line-height: 1.6;
+  padding-top: 0.15rem;
+}
+.exp-role {
+  font-size: 0.88rem; font-weight: 500;
+  color: var(--ink); margin-bottom: 0.15rem;
+}
+.exp-company {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem; color: var(--ink-light);
+  margin-bottom: 0.6rem; letter-spacing: 0.04em;
+}
+.exp-desc {
+  font-size: 0.78rem; color: var(--ink-mid);
+  line-height: 1.8;
+}
+.exp-desc ul { list-style: none; }
+.exp-desc ul li { display: flex; gap: 0.5rem; padding: 0.1rem 0; }
+.exp-desc ul li::before { content: '–'; color: var(--ink-light); flex-shrink: 0; }
+
+/* ── SKILLS ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+  gap: 1.5rem 2rem;
+}
+.skill-group-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 0.1em;
+  color: var(--ink-light); margin-bottom: 0.6rem;
+  text-transform: lowercase;
+}
+.skill-items {
+  display: flex; flex-wrap: wrap; gap: 0.35rem;
+}
+.skill-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; color: var(--ink-mid);
+  padding: 0.18rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  transition: border-color .15s, color .15s;
+}
+.skill-chip:hover { border-color: #aaa; color: var(--ink); }
+
+/* ── CONTACT ROW ── */
+.contact-row {
+  display: flex; flex-wrap: wrap; gap: 1.2rem;
+  align-items: center;
+}
+.contact-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem; color: var(--ink-mid);
+  text-decoration: none; letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1px;
+  transition: color .2s, border-color .2s;
+}
+.contact-link:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ── FOOTER ── */
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+  display: flex; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.5rem;
+}
+.footer-name {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic; font-size: 0.9rem; color: var(--ink-light);
+}
+.footer-copy {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem; color: var(--border);
+}
+
+/* ── REVEAL ── */
+.reveal { opacity:0; transform:translateY(16px); transition: opacity .55s ease, transform .55s ease; }
+.reveal.in { opacity:1; transform:none; }
+
+/* ── MOBILE NAV (top bar on small screens) ── */
+.topnav {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+  align-items: center; justify-content: space-between;
+}
+.topnav-name {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic; font-size: 1rem; color: var(--ink);
+  text-decoration: none;
+}
+.topnav-links {
+  display: flex; gap: 1.5rem; list-style: none;
+}
+.topnav-links a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; color: var(--ink-light);
+  text-decoration: none; letter-spacing: 0.06em;
+  transition: color .2s;
+}
+.topnav-links a:hover { color: var(--ink); }
+
+/* hamburger */
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0; }
+.hamburger span {
+  display: block; width: 20px; height: 1.5px;
+  background: var(--ink); margin: 4px 0;
+  transition: all .25s;
+}
+.mobile-menu {
+  display: none;
+  position: fixed; top: 52px; left: 0; right: 0;
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem; z-index: 49;
+  flex-direction: column; gap: 0.8rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem; color: var(--ink-mid);
+  text-decoration: none; padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.06em;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .sidenav { display: none; }
+  .topnav { display: flex; }
+  .hamburger { display: block; }
+  .topnav-links { display: none; }
+  main { margin-left: 0; padding: 5rem 1.8rem 4rem; }
+  .hero-name { font-size: clamp(3rem,14vw,5rem); }
+  .proj-grid { grid-template-columns: 1fr; }
+  .exp-item { grid-template-columns: 1fr; gap: 0.4rem; }
+  .exp-when { padding-top: 0; }
+}
+
+@media (max-width: 480px) {
+  main { padding: 5rem 1.2rem 3rem; }
+  .hero-name { font-size: clamp(2.8rem, 16vw, 4rem); }
+  .hero-tagline { font-size: 0.95rem; }
+  .info-list li { font-size: 0.85rem; }
+  .skills-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .contact-row { gap: 0.8rem; }
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(14px); }
+  to   { opacity:1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Preview popup -->
+<div class="proj-preview" id="projPreview">
+  <canvas id="previewCanvas" width="200" height="112"></canvas>
+  <div class="proj-preview-url" id="previewUrl"></div>
+</div>
+
+<!-- SIDE NAV (desktop) -->
+<nav class="sidenav">
+  <div class="sidenav-links">
+    <a href="#top">me</a>
+    <a href="#projects">projects</a>
+    <a href="#experience">experience</a>
+    <a href="#skills">skills</a>
+    <a href="#contact">contact</a>
+  </div>
+  <div class="sidenav-bottom">
+    <div class="sidenav-status">
+      <span class="status-dot"></span>
+      open to<br>internships
+    </div>
+  </div>
+</nav>
+
+<!-- TOP NAV (mobile) -->
+<nav class="topnav">
+  <a href="#top" class="topnav-name">Victoria Chernobay</a>
+  <button class="hamburger" id="hamburger" aria-label="menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#top" onclick="closeMenu()">me</a>
+  <a href="#projects" onclick="closeMenu()">projects</a>
+  <a href="#experience" onclick="closeMenu()">experience</a>
+  <a href="#skills" onclick="closeMenu()">skills</a>
+  <a href="#contact" onclick="closeMenu()">contact</a>
+</div>
+
+<!-- MAIN -->
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1 class="hero-name">
+      <a href="https://linkedin.com/in/chernobayv" target="_blank" title="LinkedIn ↗">
+        Victoria<br>
+        <span class="italic">Chernobay</span>
+      </a>
+    </h1>
+
+    <div class="hero-meta">
+      <span class="hl hl-y">Computer Engineering (Hons.)</span>
+      <span class="hero-school">@TorontoMet</span>
+    </div>
+
+    <p class="hero-tagline">
+      i <span class="ul-ink">build</span> and <span class="ul-ink">ship</span> things — hardware, software, and everything between.
+    </p>
+
+    <ul class="info-list">
+      <li>interning at <span class="hl hl-b">SAP</span> on Physical AI — NVIDIA edge hardware + DeepSeek LLMs</li>
+      <li>founded <span class="hl hl-g">FRC Team 9262</span>, raised $60K, led 100+ students to a Top 10 national ranking</li>
+      <li>raised <span class="hl hl-o">$300,000</span> for youth STEM as a keynote speaker at a corporate gala</li>
+      <li>built affective computing systems, competition robots, and LLM-powered apps</li>
+      <li>peer tutor for circuits & programming <span class="hl hl-p">@TMU</span></li>
+      <li>seeking <span class="hl hl-r">summer 2026 internship opportunities!</span></li>
+    </ul>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section reveal" id="projects">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">projects</span>
+    </div>
+
+    <div class="proj-grid">
+
+      <div class="proj-card" data-url="https://github.com/chernobayv" data-label="github.com/chernobayv">
+        <div class="proj-thumb">
+          <canvas data-anim="jetson"></canvas>
+          <div class="proj-thumb-fade"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-kind">affective computing · MakeUofT 2026</div>
+          <div class="proj-name">VitalGroove</div>
+          <div class="proj-desc">Pose-estimation system on NVIDIA Jetson Nano — detects human interaction and triggers real-time mechatronic feedback. Custom serial handshake between Python AI and C++ hardware. Optimized VLM inference within 4GB RAM.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">Python</span>
+            <span class="proj-tag">C++</span>
+            <span class="proj-tag">Jetson Nano</span>
+            <span class="proj-tag">Mediapipe</span>
+            <span class="proj-tag">OpenCV</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card" data-url="https://github.com/chernobayv" data-label="github.com/chernobayv">
+        <div class="proj-thumb">
+          <canvas data-anim="robot"></canvas>
+          <div class="proj-thumb-fade"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-kind">robotics · FRC 2024</div>
+          <div class="proj-name">FRC "Crescendo" Robot</div>
+          <div class="proj-desc">120lb competition robot built in SolidWorks. PID control loops in Java for high-accuracy shooter velocity. CAN bus network with 8+ motor controllers, drivetrain encoders, and LimeLight vision targeting. Top 10 nationally.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">Java</span>
+            <span class="proj-tag">WPILib</span>
+            <span class="proj-tag">PID</span>
+            <span class="proj-tag">CAN Bus</span>
+            <span class="proj-tag">SolidWorks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card" data-url="https://github.com/chernobayv" data-label="github.com/chernobayv">
+        <div class="proj-thumb">
+          <canvas data-anim="llm"></canvas>
+          <div class="proj-thumb-fade"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-kind">full-stack · SAP co-op 2024</div>
+          <div class="proj-name">SAP BTP LLM Platform</div>
+          <div class="proj-desc">Built an SAP BTP application integrating GPT-4o and Google APIs. Presented the architecture as a technical keynote at the TDSB Teachers Conference to 100+ educators. Supported backend API improvements for internal developer platforms.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">SAP BTP</span>
+            <span class="proj-tag">GPT-4o</span>
+            <span class="proj-tag">Google API</span>
+            <span class="proj-tag">REST</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-card" data-url="https://github.com/chernobayv" data-label="github.com/chernobayv">
+        <div class="proj-thumb">
+          <canvas data-anim="conveyor"></canvas>
+          <div class="proj-thumb-fade"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-kind">mechanical design · Jan 2026</div>
+          <div class="proj-name">Keep on Cooking</div>
+          <div class="proj-desc">Conveyor-belt hardware mechanism with a physical obstacle system to gamify workspace productivity. Designed in Onshape, animated in Blender to demonstrate full mechanical office integration.</div>
+          <div class="proj-tags">
+            <span class="proj-tag">Onshape</span>
+            <span class="proj-tag">Blender</span>
+            <span class="proj-tag">Mechanical Design</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section reveal" id="experience">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">experience</span>
+    </div>
+
+    <div class="exp-list">
+
+      <div class="exp-item">
+        <div class="exp-when">Jan 2026<br>– Present</div>
+        <div>
+          <div class="exp-role">Physical AI Lab Intern</div>
+          <div class="exp-company">SAP · Toronto, ON</div>
+          <div class="exp-desc">
+            <ul>
+              <li>Leading development of industrial Physical AI prototypes — NVIDIA hardware with DeepSeek LLMs on Raspberry Pi, bridging cloud logic with physical manufacturing.</li>
+              <li>Optimizing hardware-software communication between Python and C++ components; benchmarking VLM computational efficiency in constrained embedded environments.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-when">Aug 2022<br>– Jul 2025</div>
+        <div>
+          <div class="exp-role">Founder & Team Captain</div>
+          <div class="exp-company">FRC Team 9262 · Toronto, ON</div>
+          <div class="exp-desc">
+            <ul>
+              <li>Founded a FIRST Robotics team from scratch — recruited and led 100+ students across electrical, mechanical, and software divisions.</li>
+              <li>Secured $60,000 in corporate sponsorships via technical pitches; managed full team budget and hardware procurement.</li>
+              <li>Architected CAN bus network synchronizing 8+ motor controllers and vision-assisted targeting systems.</li>
+              <li>Top 10 National Ranking · Provincial Semi-Finalist · Rookie All-Star Award · Dean's List Nomination.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-when">Jan – Jul<br>2024</div>
+        <div>
+          <div class="exp-role">Engineering Co-op Student</div>
+          <div class="exp-company">SAP · Toronto, ON</div>
+          <div class="exp-desc">
+            <ul>
+              <li>Built an SAP BTP app with GPT-4o and Google API integration.</li>
+              <li>Delivered a technical keynote at the TDSB Teachers Conference to 100+ professional educators.</li>
+              <li>Supported full-stack debugging and backend API improvements for internal developer platforms.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-when">Aug 2024<br>– Aug 2025</div>
+        <div>
+          <div class="exp-role">Fundraising Lead — Youth Council</div>
+          <div class="exp-company">FIRST Robotics Canada · Toronto, ON</div>
+          <div class="exp-desc">
+            <ul>
+              <li>Chosen to deliver a keynote at a high-profile corporate gala, raising $300,000 for youth STEM programs across Canada.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section reveal" id="skills">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">skills</span>
+    </div>
+    <div class="skills-grid">
+      <div>
+        <div class="skill-group-name">hardware & embedded</div>
+        <div class="skill-items">
+          <span class="skill-chip">NVIDIA Jetson</span>
+          <span class="skill-chip">Raspberry Pi</span>
+          <span class="skill-chip">Arduino</span>
+          <span class="skill-chip">CAN Bus</span>
+          <span class="skill-chip">PCB Wiring</span>
+          <span class="skill-chip">Motor Encoders</span>
+          <span class="skill-chip">Servo / Mechatronics</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-name">languages</div>
+        <div class="skill-items">
+          <span class="skill-chip">Python</span>
+          <span class="skill-chip">C / C++</span>
+          <span class="skill-chip">Java</span>
+          <span class="skill-chip">Shell Scripting</span>
+          <span class="skill-chip">RESTful APIs</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-name">AI & vision</div>
+        <div class="skill-items">
+          <span class="skill-chip">OpenCV</span>
+          <span class="skill-chip">Mediapipe</span>
+          <span class="skill-chip">NumPy</span>
+          <span class="skill-chip">GPT-4o API</span>
+          <span class="skill-chip">Gemini API</span>
+          <span class="skill-chip">DeepSeek / VLMs</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-name">tools & design</div>
+        <div class="skill-items">
+          <span class="skill-chip">SAP BTP</span>
+          <span class="skill-chip">Git / GitHub</span>
+          <span class="skill-chip">Linux</span>
+          <span class="skill-chip">Blender</span>
+          <span class="skill-chip">Figma</span>
+          <span class="skill-chip">Onshape</span>
+          <span class="skill-chip">SolidWorks</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section reveal" id="contact">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <span class="section-title">contact</span>
+    </div>
+    <p style="font-size:0.88rem;color:var(--ink-mid);margin-bottom:1.2rem;max-width:460px;line-height:1.8;">
+      I'm looking for summer 2026 internship opportunities in embedded systems, edge AI, robotics, or software engineering. Let's talk.
+    </p>
+    <div class="contact-row">
+      <a href="mailto:chernobayv05@gmail.com" class="contact-link">chernobayv05@gmail.com</a>
+      <a href="https://linkedin.com/in/chernobayv" target="_blank" class="contact-link">linkedin ↗</a>
+      <a href="https://github.com/chernobayv" target="_blank" class="contact-link">github ↗</a>
+      <a href="https://chernobayv.github.io/portfolio" target="_blank" class="contact-link">portfolio ↗</a>
+      <a href="tel:6479741035" class="contact-link">647-974-1035</a>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-name">Victoria Chernobay</span>
+      <span class="footer-copy">© 2026</span>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+(function tick(){
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(tick);
+})();
+document.querySelectorAll('a, button, .proj-card, .skill-chip').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cur-link'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cur-link'));
+});
+
+// ── MOBILE MENU ──
+const ham = document.getElementById('hamburger');
+const menu = document.getElementById('mobileMenu');
+ham.addEventListener('click', () => menu.classList.toggle('open'));
+function closeMenu() { menu.classList.remove('open'); }
+document.addEventListener('click', e => {
+  if(!ham.contains(e.target) && !menu.contains(e.target)) menu.classList.remove('open');
+});
+
+// ── ACTIVE NAV ──
+const sections = document.querySelectorAll('section[id], div[id]');
+const navLinks = document.querySelectorAll('.sidenav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if(window.scrollY >= s.offsetTop - 200) cur = s.id; });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#'+cur);
+  });
+}, { passive: true });
+
+// ── PROJECT CANVAS ANIMATIONS ──
+function makeAnim(canvas) {
+  const type = canvas.dataset.anim;
+  const ctx = canvas.getContext('2d');
+  let t = 0;
+
+  const COLORS = {
+    jetson: { bg: ['#0f0f1a','#1a1a2e'], acc: 'rgba(100,180,255,' },
+    robot:  { bg: ['#0f1a0f','#1a2e1a'], acc: 'rgba(100,220,130,' },
+    llm:    { bg: ['#1a0f1a','#2e1a2e'], acc: 'rgba(200,130,255,' },
+    conveyor:{ bg: ['#1a1208','#2e2010'], acc: 'rgba(255,180,80,'  },
+  };
+  const c = COLORS[type] || COLORS.jetson;
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth  || 400;
+    canvas.height = canvas.offsetHeight || 225;
+  }
+  resize();
+  new ResizeObserver(resize).observe(canvas);
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    // bg gradient
+    const g = ctx.createLinearGradient(0, 0, W, H);
+    g.addColorStop(0, c.bg[0]); g.addColorStop(1, c.bg[1]);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    // subtle dot grid
+    for(let x=0; x<W; x+=22) for(let y=0; y<H; y+=22) {
+      ctx.fillStyle = c.acc + '0.12)';
+      ctx.beginPath(); ctx.arc(x, y, 0.8, 0, Math.PI*2); ctx.fill();
+    }
+
+    if(type === 'jetson') {
+      // flowing particles (pose estimation feel)
+      for(let i=0; i<10; i++) {
+        const x = W/2 + Math.cos(t*0.018 + i*0.63)*W*0.3;
+        const y = H/2 + Math.sin(t*0.014 + i*0.63)*H*0.35;
+        const r = 2 + Math.sin(t*0.03+i)*1.5;
+        ctx.fillStyle = c.acc + (0.4 + Math.sin(t*0.02+i)*0.2) + ')';
+        ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+        // connect nearby
+        for(let j=i+1; j<10; j++) {
+          const x2 = W/2+Math.cos(t*0.018+j*0.63)*W*0.3;
+          const y2 = H/2+Math.sin(t*0.014+j*0.63)*H*0.35;
+          const d = Math.hypot(x-x2,y-y2);
+          if(d<80) {
+            ctx.strokeStyle = c.acc + (0.15*(1-d/80)) + ')';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x2,y2); ctx.stroke();
+          }
+        }
+      }
+    }
+    else if(type === 'robot') {
+      // sine waves (motor velocity / PID)
+      for(let i=0; i<4; i++) {
+        ctx.beginPath();
+        ctx.strokeStyle = c.acc + (0.1 + i*0.07) + ')';
+        ctx.lineWidth = 1.5;
+        for(let x=0; x<=W; x+=2) {
+          const y = H/2 + Math.sin(x*0.025+t*0.03+i*0.9)*(14+i*9) + Math.cos(x*0.01)*6;
+          x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+        }
+        ctx.stroke();
+      }
+      // moving dot on top wave
+      const dotX = (t*2.5)%W;
+      const dotY = H/2 + Math.sin(dotX*0.025+t*0.03)*(14);
+      ctx.fillStyle = c.acc + '0.8)';
+      ctx.beginPath(); ctx.arc(dotX,dotY,4,0,Math.PI*2); ctx.fill();
+    }
+    else if(type === 'llm') {
+      // text token stream
+      ctx.font = '11px "DM Mono", monospace';
+      const tokens = ['<token>','embed','attend','softmax','→','output','✓','API','LLM','GPT'];
+      for(let i=0; i<12; i++) {
+        const x = ((i*60 + t*0.6)%(W+80))-40;
+        const y = 30 + (i%4)*(H/4);
+        ctx.fillStyle = c.acc + (0.15+Math.sin(t*0.02+i)*0.1) + ')';
+        ctx.fillText(tokens[i%tokens.length], x, y);
+      }
+    }
+    else if(type === 'conveyor') {
+      // conveyor belt lines
+      const beltY = H*0.55;
+      ctx.strokeStyle = c.acc+'0.3)'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(0,beltY); ctx.lineTo(W,beltY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,beltY+18); ctx.lineTo(W,beltY+18); ctx.stroke();
+      // belt segments
+      for(let i=0; i<12; i++) {
+        const x = ((i*40 + t*1.2)%(W+40))-20;
+        ctx.strokeStyle = c.acc+'0.25)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(x,beltY); ctx.lineTo(x+10,beltY+18); ctx.stroke();
+      }
+      // items on belt
+      for(let i=0;i<3;i++) {
+        const bx = ((i*120+t*1.2)%(W+60))-30;
+        ctx.fillStyle = c.acc+'0.4)';
+        ctx.fillRect(bx, beltY-18, 28, 18);
+      }
+    }
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+document.querySelectorAll('.proj-thumb canvas').forEach(makeAnim);
+
+// ── HOVER PREVIEW ──
+const preview = document.getElementById('projPreview');
+const pvCanvas = document.getElementById('previewCanvas');
+const pvCtx = pvCanvas.getContext('2d');
+const pvUrl = document.getElementById('previewUrl');
+
+const thumbColors = {
+  0: ['#0f0f1a','#1a1a2e'],
+  1: ['#0f1a0f','#1a2e1a'],
+  2: ['#1a0f1a','#2e1a2e'],
+  3: ['#1a1208','#2e2010'],
+};
+
+document.querySelectorAll('.proj-card').forEach((card, i) => {
+  card.addEventListener('mouseenter', () => {
+    // draw mini version
+    const g = pvCtx.createLinearGradient(0,0,200,112);
+    const cols = thumbColors[i] || thumbColors[0];
+    g.addColorStop(0, cols[0]); g.addColorStop(1, cols[1]);
+    pvCtx.fillStyle = g; pvCtx.fillRect(0,0,200,112);
+    // dot grid
+    pvCtx.fillStyle = 'rgba(255,255,255,0.04)';
+    for(let x=0;x<200;x+=14) for(let y=0;y<112;y+=14) {
+      pvCtx.beginPath(); pvCtx.arc(x,y,0.8,0,Math.PI*2); pvCtx.fill();
+    }
+    pvCtx.font = '11px monospace';
+    pvCtx.fillStyle = 'rgba(255,255,255,0.2)';
+    pvCtx.textAlign = 'center';
+    pvCtx.fillText('open ↗', 100, 60);
+    pvUrl.textContent = card.dataset.label || '';
+    preview.classList.add('show');
+  });
+  card.addEventListener('mouseleave', () => preview.classList.remove('show'));
+  card.addEventListener('click', () => { if(card.dataset.url) window.open(card.dataset.url,'_blank'); });
+});
+
+document.addEventListener('mousemove', e => {
+  const x = Math.min(e.clientX + 14, window.innerWidth - 220);
+  const y = Math.min(e.clientY + 10, window.innerHeight - 140);
+  preview.style.left = x+'px';
+  preview.style.top  = y+'px';
+});
+
+// ── SCROLL REVEAL ──
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+document.querySelectorAll('.exp-item, .proj-card').forEach((el,i) => {
+  el.style.transitionDelay = (i % 3) * 0.07 + 's';
+});
+</script>
+</body>
+</html>
