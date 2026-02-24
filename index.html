@@ -689,8 +689,8 @@ function closeOverlay(){
   document.body.style.overflow='';
 }
 
-document.getElementById('openOverlay').addEventListener('click',openOverlay);
-overlayClose.addEventListener('click',closeOverlay);
+var openBtn = document.getElementById('openOverlay');
+if (openBtn) openBtn.addEventListener('click', openOverlay);overlayClose.addEventListener('click',closeOverlay);
 overlay.addEventListener('click',function(e){if(e.target===overlay)closeOverlay();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeOverlay();});
 
